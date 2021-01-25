@@ -8,7 +8,8 @@ import retrofit2.http.Query
 interface ApiFoursquare {
     @GET("search/")
     suspend fun getVenuesOfThisLocation(
-        @Query("radius") radius: Int = 200,
+        @Query("radius") radius: Int = 1000,
+        @Query("limit") limit: Int = 50,
         @Query("ll") location: String,
         @Query("v") versionApi: Int = 20120609,
         @Query("client_secret") client_secret: String = BuildConfig.client_secret,
