@@ -5,13 +5,11 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.google.common.truth.Truth
-import com.google.common.truth.Truth.*
+import com.google.common.truth.Truth.assertThat
 import ir.maghsoodi.myvenues.data.models.Contact
 import ir.maghsoodi.myvenues.data.models.Location
 import ir.maghsoodi.myvenues.data.models.MetaEntity
 import ir.maghsoodi.myvenues.data.models.VenueEntity
-import ir.maghsoodi.myvenues.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
@@ -48,7 +46,7 @@ class TestVenueDao {
 
     @Test
     fun testInsertMeta() = runBlockingTest {
-        val metadata = MetaEntity("something", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata = MetaEntity("something", 200, 98.765, 12.345, System.currentTimeMillis(),"")
         dao.insertMeta(metadata)
 
         val allMetaEntity = dao.getAllMetaCalls()
@@ -58,11 +56,11 @@ class TestVenueDao {
 
     @Test
     fun testReplaceNewDataWithOldDataInMetaDataBase() = runBlockingTest {
-        val metadata1 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis())
-        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, System.currentTimeMillis())
-        val metadata3 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis())
-        val metadata4 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis())
-        val metadata5 = MetaEntity("something1", 200, 98.765, 15.345, System.currentTimeMillis())
+        val metadata1 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis(),"")
+        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, System.currentTimeMillis(),"")
+        val metadata3 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis(),"")
+        val metadata4 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis(),"")
+        val metadata5 = MetaEntity("something1", 200, 98.765, 15.345, System.currentTimeMillis(),"")
 
         dao.insertMeta(metadata1)
         dao.insertMeta(metadata2)
@@ -77,9 +75,9 @@ class TestVenueDao {
 
     @Test
     fun testReplaceNewDataWithOldDataAndJoinDataBaseCorrectAgain() = runBlockingTest {
-        val metadata1 = MetaEntity("so1", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata1 = MetaEntity("so1", 200, 98.765, 12.345, System.currentTimeMillis(),"")
         dao.insertMeta(metadata1)
-        val metadata2 = MetaEntity("so2", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata2 = MetaEntity("so2", 200, 98.765, 12.345, System.currentTimeMillis(),"")
         dao.insertMeta(metadata2)
 
         val venueEntity1 = VenueEntity(
@@ -121,9 +119,9 @@ class TestVenueDao {
 
     @Test
     fun testDeleteExpiredMeta() = runBlockingTest {
-        val metadata1 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis())
-        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, 16L)
-        val metadata3 = MetaEntity("something3", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata1 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis(),"")
+        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, 16L,"")
+        val metadata3 = MetaEntity("something3", 200, 98.765, 12.345, System.currentTimeMillis(),"")
 
         dao.insertMeta(metadata1)
         dao.insertMeta(metadata2)
@@ -140,9 +138,9 @@ class TestVenueDao {
 
     @Test
     fun testGetJustNewMetaDataLiveData() = runBlockingTest {
-        val metadata1 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis())
-        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, 16L)
-        val metadata3 = MetaEntity("something3", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata1 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis(),"")
+        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, 16L,"")
+        val metadata3 = MetaEntity("something3", 200, 98.765, 12.345, System.currentTimeMillis(),"")
 
         dao.insertMeta(metadata1)
         dao.insertMeta(metadata2)
@@ -157,9 +155,9 @@ class TestVenueDao {
 
     @Test
     fun testJoinTable() = runBlockingTest {
-        val metadata1 = MetaEntity("so1", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata1 = MetaEntity("so1", 200, 98.765, 12.345, System.currentTimeMillis(),"")
         dao.insertMeta(metadata1)
-        val metadata2 = MetaEntity("so2", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata2 = MetaEntity("so2", 200, 98.765, 12.345, System.currentTimeMillis(),"")
         dao.insertMeta(metadata2)
 
 
@@ -197,7 +195,7 @@ class TestVenueDao {
 
     @Test
     fun testLocationConverter() = runBlockingTest {
-        val metadata1 = MetaEntity("so1", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata1 = MetaEntity("so1", 200, 98.765, 12.345, System.currentTimeMillis(),"")
         dao.insertMeta(metadata1)
 
 
