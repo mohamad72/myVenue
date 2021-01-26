@@ -9,8 +9,6 @@ data class VenueEntity(
     val id: String,
     val requestId: String,
     val contact: Contact,
-    val hasPerk: Boolean,
     val location: Location,
-    val name: String,
-    val referralId: String
+    val name: String
 )

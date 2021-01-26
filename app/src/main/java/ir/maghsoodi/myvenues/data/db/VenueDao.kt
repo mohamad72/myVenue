@@ -20,7 +20,7 @@ interface VenueDao {
 
     @Transaction
     @Query("SELECT * FROM metaentity WHERE requestId = :requestId")
-    suspend fun getSchoolWithStudents(requestId: String): List<MetaWithVenues>
+    suspend fun getMetaWithVenues(requestId: String): List<MetaWithVenues>
 
     @Delete
     suspend fun deleteMeta(metaEntity: MetaEntity)
