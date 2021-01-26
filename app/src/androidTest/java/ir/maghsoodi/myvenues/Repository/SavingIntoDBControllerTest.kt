@@ -8,7 +8,10 @@ import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth
 import ir.maghsoodi.myvenues.data.db.MyVenuesDataBase
 import ir.maghsoodi.myvenues.data.db.VenueDao
+import ir.maghsoodi.myvenues.data.models.Contact
+import ir.maghsoodi.myvenues.data.models.Location
 import ir.maghsoodi.myvenues.data.models.MetaEntity
+import ir.maghsoodi.myvenues.data.models.VenueEntity
 import ir.maghsoodi.myvenues.getOrAwaitValue
 import ir.maghsoodi.myvenues.utils.Constants
 import ir.maghsoodi.myvenues.utils.TimeManagementDefault
@@ -62,4 +65,33 @@ class SavingIntoDBControllerTest {
         Truth.assertThat(allMetaEntity.get(0).created_at).isEqualTo(Constants.FAKE_CURRENT_TIME)
     }
 
+
+    @Test
+    fun saveVenueEntityIntoDB() = runBlockingTest {
+        val entitiesList = ArrayList<VenueEntity>()
+        entitiesList.add(
+            VenueEntity(
+                "something1",
+                "",
+                Contact(),
+                Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
+                "خونه"
+            )
+        )
+        entitiesList.add(
+            VenueEntity(
+                "something2",
+                "",
+                Contact(),
+                Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
+                "خوdfvfdvdfنه"
+            )
+        )
+
+        savingIntoDBController.saveVenueEntityIntoDB("so1", venueEntities = entitiesList)
+
+        val allMetaEntity = dao.getMetaWithVenues("so1")
+
+        Truth.assertThat(allMetaEntity.get(0).venues.get(0).requestId).isEqualTo("so1")
+    }
 }
