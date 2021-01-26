@@ -15,7 +15,8 @@ class SavingIntoDBController @Inject constructor(
 ) {
 
     suspend fun saveMetaEntityIntoDB(metaEntity: MetaEntity) {
-
+        metaEntity.created_at = timeManagement.getCurrentUnixTime()
+        venueDao.insertMeta(metaEntity)
     }
 
     suspend fun saveVenueEntityIntoDB(requestId: Int, venueEntities: List<VenueEntity>) {

@@ -8,7 +8,7 @@ data class MetaEntity(
     @PrimaryKey(autoGenerate = false)
     val requestId: String,
     val code: Int,
-    val lat: Double,
-    val lng: Double,
-    val created_at:Long
+    var lat: Double,
+    var lng: Double,
+    var created_at:Long
 )
