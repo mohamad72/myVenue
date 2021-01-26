@@ -1,5 +1,6 @@
 package ir.maghsoodi.myvenues.data.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import ir.maghsoodi.myvenues.data.models.MetaEntity
 import ir.maghsoodi.myvenues.data.models.Relations.MetaWithVenues
@@ -14,8 +15,18 @@ interface VenueDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMeta(metaEntity: MetaEntity)
 
+    @Query("SELECT * FROM metaentity ORDER BY created_at DESC")
+    fun getAllMetaCalls(): LiveData<List<MetaEntity>>
+
     @Transaction
-    @Query("SELECT * FROM meta_table WHERE requestId = :requestId")
+    @Query("SELECT * FROM metaentity WHERE requestId = :requestId")
     suspend fun getSchoolWithStudents(requestId: String): List<MetaWithVenues>
+
+    @Delete
+    suspend fun deleteMeta(metaEntity: MetaEntity)
+
+    @Delete
+    suspend fun deleteVenue(venueEntity: VenueEntity)
+
 
 }

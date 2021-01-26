@@ -2,6 +2,7 @@ package ir.maghsoodi.myvenues.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import ir.maghsoodi.myvenues.data.models.MetaEntity
 import ir.maghsoodi.myvenues.data.models.VenueEntity
 
@@ -12,7 +13,8 @@ import ir.maghsoodi.myvenues.data.models.VenueEntity
     ],
     version = 1
 )
-abstract class RunningDatabase : RoomDatabase() {
+@TypeConverters(TypeConverter::class)
+abstract class MyVenuesDataBase : RoomDatabase() {
 
     abstract fun getVenueDao(): VenueDao
 }
