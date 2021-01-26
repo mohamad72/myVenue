@@ -7,6 +7,7 @@ class Constants {
         const val RADIUS_FOR_SEARCH = 200
         const val VERSION_API = 20120609
         const val FAKE_CURRENT_TIME = 1611666165000
+        const val MINIMUM_EXPIRE_TIME = 1511666165000
         const val DATABASE_NAME = "venue_db"
     }
 }

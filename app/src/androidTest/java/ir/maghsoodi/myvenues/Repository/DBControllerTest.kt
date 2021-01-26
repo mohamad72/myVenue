@@ -14,7 +14,6 @@ import ir.maghsoodi.myvenues.data.models.MetaEntity
 import ir.maghsoodi.myvenues.data.models.VenueEntity
 import ir.maghsoodi.myvenues.getOrAwaitValue
 import ir.maghsoodi.myvenues.utils.Constants
-import ir.maghsoodi.myvenues.utils.TimeManagementDefault
 import ir.maghsoodi.myvenues.utils.TimeManagementFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -22,14 +21,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 @SmallTest
-class SavingIntoDBControllerTest {
+class DBControllerTest {
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -37,7 +35,7 @@ class SavingIntoDBControllerTest {
     private lateinit var database: MyVenuesDataBase
     private lateinit var dao: VenueDao
 
-    private lateinit var savingIntoDBController: SavingIntoDBController
+    private lateinit var DBController: DBController
 
     @Before
     fun setUp() {
@@ -47,7 +45,7 @@ class SavingIntoDBControllerTest {
         ).allowMainThreadQueries().build()
         dao = database.getVenueDao()
 
-        savingIntoDBController = SavingIntoDBController(dao, TimeManagementFake())
+        DBController = DBController(dao, TimeManagementFake())
     }
 
     @After
@@ -58,7 +56,7 @@ class SavingIntoDBControllerTest {
     @Test
     fun saveMetaEntityIntoDB() = runBlockingTest {
         val metadata = MetaEntity("something", 200, 98.765, 12.345, 0L)
-        savingIntoDBController.saveMetaEntityIntoDB(metadata)
+        DBController.saveMetaEntityIntoDB(metadata)
 
         val allMetaEntity = dao.getAllMetaCalls().getOrAwaitValue()
 
@@ -68,6 +66,10 @@ class SavingIntoDBControllerTest {
 
     @Test
     fun saveVenueEntityIntoDB() = runBlockingTest {
+        val metadata = MetaEntity("so1", 200, 98.765, 12.345, 0L)
+        DBController.saveMetaEntityIntoDB(metadata)
+
+
         val entitiesList = ArrayList<VenueEntity>()
         entitiesList.add(
             VenueEntity(
@@ -88,7 +90,7 @@ class SavingIntoDBControllerTest {
             )
         )
 
-        savingIntoDBController.saveVenueEntityIntoDB("so1", venueEntities = entitiesList)
+        DBController.saveVenueEntityIntoDB("so1", venueEntities = entitiesList)
 
         val allMetaEntity = dao.getMetaWithVenues("so1")
 

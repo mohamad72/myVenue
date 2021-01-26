@@ -120,16 +120,16 @@ class TestVenueDao {
     }
 
     @Test
-    fun testDeleteMeta() = runBlockingTest {
+    fun testDeleteExpiredMeta() = runBlockingTest {
         val metadata1 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis())
-        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, 16L)
         val metadata3 = MetaEntity("something3", 200, 98.765, 12.345, System.currentTimeMillis())
 
         dao.insertMeta(metadata1)
         dao.insertMeta(metadata2)
         dao.insertMeta(metadata3)
 
-        dao.deleteMeta(metadata2)
+        dao.deleteOldMeta()
 
         val allMetaEntity = dao.getAllMetaCalls().getOrAwaitValue()
 
@@ -139,16 +139,16 @@ class TestVenueDao {
     }
 
     @Test
-    fun testGetAllMetaDataLiveData() = runBlockingTest {
+    fun testGetJustNewMetaDataLiveData() = runBlockingTest {
         val metadata1 = MetaEntity("something1", 200, 98.765, 12.345, System.currentTimeMillis())
-        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, System.currentTimeMillis())
+        val metadata2 = MetaEntity("something2", 200, 98.765, 12.345, 16L)
         val metadata3 = MetaEntity("something3", 200, 98.765, 12.345, System.currentTimeMillis())
 
         dao.insertMeta(metadata1)
         dao.insertMeta(metadata2)
         dao.insertMeta(metadata3)
 
-        dao.deleteMeta(metadata2)
+        dao.deleteOldMeta()
 
         val allMetaEntity = dao.getAllMetaCalls().getOrAwaitValue()
 
