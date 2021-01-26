@@ -23,11 +23,11 @@ class FacadePatternRepository @Inject constructor(
         return dbController.saveVenueEntityIntoDB(requestId,venueEntities)
     }
 
-    suspend fun hasNearestMeta(lat: Double, lng: Double): Boolean {
+    suspend fun hasNearestMetaInDB(lat: Double, lng: Double): Boolean {
         return dbController. hasNearestMeta(lat,lng)
     }
 
-    suspend fun getNearestMeta(lat: Double, lng: Double): MetaEntity {
+    suspend fun getNearestMetaInDB(lat: Double, lng: Double): MetaEntity {
         return dbController.getNearestMeta(lat,lng)
     }
 
