@@ -9,6 +9,8 @@ class Constants {
         const val VERSION_API = 20120609
         const val FAKE_CURRENT_TIME = 1611666165000
         const val MINIMUM_EXPIRE_TIME = 1511666165000
+        const val EXPIRE_TIME_RANGE: Long = 48 * 24 * 60 * 60 * 1000L
+
         const val DATABASE_NAME = "venue_db"
     }
 }

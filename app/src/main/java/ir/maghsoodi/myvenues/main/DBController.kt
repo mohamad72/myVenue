@@ -18,9 +18,9 @@ class DBController @Inject constructor(
         venueDao.insertMeta(metaEntity)
     }
 
-    suspend fun saveVenueEntityIntoDB(requestId: String, venueEntities: List<VenueEntity>) {
+    suspend fun saveVenueEntityIntoDB(metaEntity: MetaEntity, venueEntities: List<VenueEntity>) {
         venueEntities.forEach {
-            it.requestId = requestId
+            it.requestId = metaEntity.requestId
             venueDao.insertVenue(it)
         }
     }

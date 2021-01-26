@@ -54,7 +54,7 @@ class DBControllerTest {
 
     @Test
     fun saveMetaEntityIntoDB() = runBlockingTest {
-        val metadata = MetaEntity("something", 200, 98.765, 12.345, 0L)
+        val metadata = MetaEntity("something", 200, 98.765, 12.345, 0L, "")
         DBController.saveMetaEntityIntoDB(metadata)
 
         val allMetaEntity = dao.getAllMetaCalls()
@@ -65,7 +65,7 @@ class DBControllerTest {
 
     @Test
     fun saveVenueEntityIntoDB() = runBlockingTest {
-        val metadata = MetaEntity("so1", 200, 98.765, 12.345, 0L)
+        val metadata = MetaEntity("so1", 200, 98.765, 12.345, 0L,"")
         DBController.saveMetaEntityIntoDB(metadata)
 
 
@@ -89,7 +89,7 @@ class DBControllerTest {
             )
         )
 
-        DBController.saveVenueEntityIntoDB("so1", venueEntities = entitiesList)
+        DBController.saveVenueEntityIntoDB(metadata, venueEntities = entitiesList)
 
         val allMetaEntity = dao.getMetaWithVenues("so1")
 

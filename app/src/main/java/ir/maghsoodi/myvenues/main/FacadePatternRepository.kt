@@ -19,8 +19,8 @@ class FacadePatternRepository @Inject constructor(
         return dbController.saveMetaEntityIntoDB(metaEntity)
     }
 
-    suspend fun saveVenueEntityIntoDB(requestId: String, venueEntities: List<VenueEntity>) {
-        return dbController.saveVenueEntityIntoDB(requestId,venueEntities)
+    suspend fun saveVenueEntityIntoDB(metaEntity: MetaEntity, venueEntities: List<VenueEntity>) {
+        return dbController.saveVenueEntityIntoDB(metaEntity,venueEntities)
     }
 
     suspend fun hasNearestMetaInDB(lat: Double, lng: Double): Boolean {
