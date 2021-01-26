@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import ir.maghsoodi.myvenues.Repository.DBController
+import ir.maghsoodi.myvenues.main.DBController
 import ir.maghsoodi.myvenues.data.db.MyVenuesDataBase
 import ir.maghsoodi.myvenues.data.db.VenueDao
 import ir.maghsoodi.myvenues.data.models.ApiFoursquare

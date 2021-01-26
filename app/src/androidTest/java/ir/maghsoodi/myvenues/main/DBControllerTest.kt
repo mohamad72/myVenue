@@ -1,4 +1,4 @@
-package ir.maghsoodi.myvenues.Repository
+package ir.maghsoodi.myvenues.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
@@ -12,7 +12,6 @@ import ir.maghsoodi.myvenues.data.models.Contact
 import ir.maghsoodi.myvenues.data.models.Location
 import ir.maghsoodi.myvenues.data.models.MetaEntity
 import ir.maghsoodi.myvenues.data.models.VenueEntity
-import ir.maghsoodi.myvenues.getOrAwaitValue
 import ir.maghsoodi.myvenues.utils.Constants
 import ir.maghsoodi.myvenues.utils.TimeManagementFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi

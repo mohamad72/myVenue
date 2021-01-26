@@ -1,4 +1,4 @@
-package ir.maghsoodi.myvenues.Repository
+package ir.maghsoodi.myvenues.main
 
 import ir.maghsoodi.myvenues.data.models.ApiFoursquare
 import ir.maghsoodi.myvenues.data.models.SearchResponse
@@ -13,12 +13,14 @@ class RemoteController @Inject constructor(
         return try {
             val response = apiFoursquare.getVenuesOfThisLocation(location = "$lat,$lng")
             val result = response.body()
-            if(response.isSuccessful && result != null) {
+            if (response.isSuccessful && result != null) {
                 Resource.Success(result)
+            } else if (result != null) {
+                Resource.Error(result.meta.errorDetail)
             } else {
                 Resource.Error(response.message())
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occured")
         }
     }

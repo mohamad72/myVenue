@@ -1,4 +1,4 @@
-package ir.maghsoodi.myvenues.Repository
+package ir.maghsoodi.myvenues.main
 
 import ir.maghsoodi.myvenues.data.db.VenueDao
 import ir.maghsoodi.myvenues.data.models.MetaEntity
@@ -6,9 +6,6 @@ import ir.maghsoodi.myvenues.data.models.VenueEntity
 import ir.maghsoodi.myvenues.utils.Constants.Companion.MAXIMUM_NEAR_DISTANCE
 import ir.maghsoodi.myvenues.utils.TimeManagement
 import ir.maghsoodi.myvenues.utils.Utils
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.net.CacheRequest
-import java.util.ArrayList
 import javax.inject.Inject
 
 class DBController @Inject constructor(

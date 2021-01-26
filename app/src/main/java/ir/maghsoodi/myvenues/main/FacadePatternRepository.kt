@@ -1,4 +1,4 @@
-package ir.maghsoodi.myvenues.Repository
+package ir.maghsoodi.myvenues.main
 
 import ir.maghsoodi.myvenues.data.models.MetaEntity
 import ir.maghsoodi.myvenues.data.models.SearchResponse
