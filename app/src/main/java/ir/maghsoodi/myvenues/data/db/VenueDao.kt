@@ -17,7 +17,7 @@ interface VenueDao {
     suspend fun insertMeta(metaEntity: MetaEntity)
 
     @Query("SELECT * FROM metaentity Where created_at >= :minimumTimeValid ORDER BY created_at DESC")
-    fun getAllMetaCalls(minimumTimeValid: Long = MINIMUM_EXPIRE_TIME): LiveData<List<MetaEntity>>
+    suspend fun getAllMetaCalls(minimumTimeValid: Long = MINIMUM_EXPIRE_TIME): List<MetaEntity>
 
     @Transaction
     @Query("SELECT * FROM metaentity WHERE requestId = :requestId")

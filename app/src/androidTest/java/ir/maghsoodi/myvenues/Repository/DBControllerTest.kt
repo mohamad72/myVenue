@@ -58,7 +58,7 @@ class DBControllerTest {
         val metadata = MetaEntity("something", 200, 98.765, 12.345, 0L)
         DBController.saveMetaEntityIntoDB(metadata)
 
-        val allMetaEntity = dao.getAllMetaCalls().getOrAwaitValue()
+        val allMetaEntity = dao.getAllMetaCalls()
 
         Truth.assertThat(allMetaEntity.get(0).created_at).isEqualTo(Constants.FAKE_CURRENT_TIME)
     }

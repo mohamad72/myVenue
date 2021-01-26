@@ -51,7 +51,7 @@ class TestVenueDao {
         val metadata = MetaEntity("something", 200, 98.765, 12.345, System.currentTimeMillis())
         dao.insertMeta(metadata)
 
-        val allMetaEntity = dao.getAllMetaCalls().getOrAwaitValue()
+        val allMetaEntity = dao.getAllMetaCalls()
 
         assertThat(allMetaEntity).contains(metadata)
     }
@@ -70,7 +70,7 @@ class TestVenueDao {
         dao.insertMeta(metadata4)
         dao.insertMeta(metadata5)
 
-        val allMetaEntity = dao.getAllMetaCalls().getOrAwaitValue()
+        val allMetaEntity = dao.getAllMetaCalls()
 
         assertThat(allMetaEntity.size).isEqualTo(2)
     }
@@ -131,7 +131,7 @@ class TestVenueDao {
 
         dao.deleteOldMeta()
 
-        val allMetaEntity = dao.getAllMetaCalls().getOrAwaitValue()
+        val allMetaEntity = dao.getAllMetaCalls()
 
         assertThat(allMetaEntity).contains(metadata1)
         assertThat(allMetaEntity).doesNotContain(metadata2)
@@ -150,7 +150,7 @@ class TestVenueDao {
 
         dao.deleteOldMeta()
 
-        val allMetaEntity = dao.getAllMetaCalls().getOrAwaitValue()
+        val allMetaEntity = dao.getAllMetaCalls()
 
         assertThat(allMetaEntity.size).isEqualTo(2)
     }
