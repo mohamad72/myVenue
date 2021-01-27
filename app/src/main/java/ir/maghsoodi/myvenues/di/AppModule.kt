@@ -10,6 +10,8 @@ import ir.maghsoodi.myvenues.main.DBController
 import ir.maghsoodi.myvenues.data.db.MyVenuesDataBase
 import ir.maghsoodi.myvenues.data.db.VenueDao
 import ir.maghsoodi.myvenues.data.models.ApiFoursquare
+import ir.maghsoodi.myvenues.main.FacadePatternRepository
+import ir.maghsoodi.myvenues.main.repository.MainRepository
 import ir.maghsoodi.myvenues.utils.Constants.Companion.BASE_URL
 import ir.maghsoodi.myvenues.utils.Constants.Companion.DATABASE_NAME
 import ir.maghsoodi.myvenues.utils.TimeManagement
@@ -59,4 +61,12 @@ object AppModule {
     ): DBController {
         return DBController(venueDao, timeManagement)
     }
+
+    @Singleton
+    @Provides
+    fun provideMainRepository(
+        facadeRepository: FacadePatternRepository,
+        timeManagement: TimeManagement
+    ):
+            MainRepository = MainRepository(facadeRepository, timeManagement)
 }
