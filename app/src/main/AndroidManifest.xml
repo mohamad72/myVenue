@@ -10,10 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyVenues">
-        <service
-            android:name=".services.NetworkEnableJobScheduler"
-            android:enabled="true"
-            android:exported="false"></service>
 
         <activity android:name=".ui.MainActivity">
             <intent-filter>
