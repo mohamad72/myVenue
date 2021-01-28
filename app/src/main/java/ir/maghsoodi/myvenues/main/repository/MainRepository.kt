@@ -8,7 +8,6 @@ import ir.maghsoodi.myvenues.utils.Resource
 import ir.maghsoodi.myvenues.utils.TimeManagement
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import timber.log.Timber
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
@@ -43,20 +42,20 @@ class MainRepository @Inject constructor(
     }
 
     suspend fun getDataFromNet(lat: Double, lng: Double) {
-        when (val ratesResponse = facadeRepository.searchNearVenueFromRemote(lat, lng)) {
-            is Resource.Error -> _venuesFlow.value = SearchEvent.Failure(ratesResponse.message!!)
+        when (val searchResponse = facadeRepository.searchNearVenueFromRemote(lat, lng)) {
+            is Resource.Error -> _venuesFlow.value = SearchEvent.Failure(searchResponse.message!!)
             is Resource.Success -> {
                 _venuesFlow.value = SearchEvent.Success(
-                    ratesResponse.data!!.response!!.venues
+                    searchResponse.data!!.response!!.venues
                 )
-                saveToDB(ratesResponse)
+                saveToDB(searchResponse,lat,lng)
             }
         }
     }
 
-    suspend fun saveToDB(ratesResponse: Resource<SearchResponse>) {
+    suspend fun saveToDB(ratesResponse: Resource<SearchResponse>,lat: Double, lng: Double) {
         facadeRepository.run {
-            saveMetaEntityIntoDB(ratesResponse.data!!.meta)
+            saveMetaEntityIntoDB(ratesResponse.data!!.meta,lat,lng)
             saveVenueEntityIntoDB(
                 ratesResponse.data.meta,
                 ratesResponse.data.response.venues

@@ -6,16 +6,20 @@ import ir.maghsoodi.myvenues.data.models.VenueEntity
 import ir.maghsoodi.myvenues.utils.Constants.Companion.MAXIMUM_NEAR_DISTANCE
 import ir.maghsoodi.myvenues.utils.TimeManagement
 import ir.maghsoodi.myvenues.utils.Utils
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.ln
 
 class DBController @Inject constructor(
     val venueDao: VenueDao,
     val timeManagement: TimeManagement
 ) {
 
-    suspend fun saveMetaEntityIntoDB(metaEntity: MetaEntity) {
+    suspend fun saveMetaEntityIntoDB(metaEntity: MetaEntity,lat: Double, lng: Double) {
         metaEntity.created_at = timeManagement.getCurrentUnixTime()
         metaEntity.errorDetail = ""
+        metaEntity.lat=lat
+        metaEntity.lng= lng
         venueDao.insertMeta(metaEntity)
     }
 
@@ -29,6 +33,7 @@ class DBController @Inject constructor(
     suspend fun hasNearestMeta(lat: Double, lng: Double): Boolean {
         var metaEntities = venueDao.getAllMetaCalls()
         metaEntities.forEach {
+            Timber.tag("location").d("distance is= ${Utils.calculateDistance(lat, lng, it.lat, it.lng)}")
             if (Utils.calculateDistance(lat, lng, it.lat, it.lng) < MAXIMUM_NEAR_DISTANCE)
                 return true
         }

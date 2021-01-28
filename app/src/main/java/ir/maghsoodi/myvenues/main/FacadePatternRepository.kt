@@ -15,20 +15,20 @@ class FacadePatternRepository @Inject constructor(
         return remoteController.searchNearVenueFromRemote(lat, lng)
     }
 
-    suspend fun saveMetaEntityIntoDB(metaEntity: MetaEntity) {
-        return dbController.saveMetaEntityIntoDB(metaEntity)
+    suspend fun saveMetaEntityIntoDB(metaEntity: MetaEntity, lat: Double, lng: Double) {
+        return dbController.saveMetaEntityIntoDB(metaEntity, lat, lng)
     }
 
     suspend fun saveVenueEntityIntoDB(metaEntity: MetaEntity, venueEntities: List<VenueEntity>) {
-        return dbController.saveVenueEntityIntoDB(metaEntity,venueEntities)
+        return dbController.saveVenueEntityIntoDB(metaEntity, venueEntities)
     }
 
     suspend fun hasNearestMetaInDB(lat: Double, lng: Double): Boolean {
-        return dbController. hasNearestMeta(lat,lng)
+        return dbController.hasNearestMeta(lat, lng)
     }
 
     suspend fun getNearestMetaInDB(lat: Double, lng: Double): MetaEntity {
-        return dbController.getNearestMeta(lat,lng)
+        return dbController.getNearestMeta(lat, lng)
     }
 
     suspend fun getVenueEntitiesOfMeta(metaEntity: MetaEntity): List<VenueEntity> {
