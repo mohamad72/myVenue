@@ -36,7 +36,7 @@ class MainRepository @Inject constructor(
         facadeRepository.deleteOldMeta(timeManagement.getCurrentUnixTime() - EXPIRE_TIME_RANGE)
         if (facadeRepository.hasNearestMetaInDB(lat, lng)) {
             val metaEntity = facadeRepository.getNearestMetaInDB(lat, lng)
-            val venueEntities = facadeRepository.getVenueEntitiesOfMeta(metaEntity)
+            val venueEntities = facadeRepository.getVenueEntitiesOfMetaFromDB(metaEntity)
             _venuesFlow.value = SearchEvent.Success(venueEntities)
         }
     }

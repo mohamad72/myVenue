@@ -18,7 +18,7 @@ class MainViewModel @ViewModelInject constructor(
 
     fun getNearVenues() {
         viewModelScope.launch(dispatchers.io) {
-            repository.getNearVenues(35.7548931,51.4931757)
+            repository.getNearVenues(35.7730901,51.3866738)
         }
     }
 
