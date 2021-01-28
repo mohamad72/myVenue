@@ -44,6 +44,8 @@ class VenueDetail : AppCompatActivity() {
     }
 
     private fun updateViews() {
+        binding.tvCategory.text = venueEntity.categories[0].name
+
         binding.tvTitle.text = if (venueEntity.name.split("|").size > 1)
             venueEntity.name.split("|")[1]
         else

@@ -1,8 +1,16 @@
 package ir.maghsoodi.myvenues.ui
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,8 +25,9 @@ import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
+
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
+class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -31,12 +40,51 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
         setContentView(binding.root)
 
         activateFragment(venueListFragment)
+        subscribeToVenueFlow()
 
-
-        if(Utils.hasLocationPermission(this))
-            updateVenueList()
+        if (Utils.hasLocationPermission(this))
+            updateListWithCurrentLocation()
         else
             getLocationPermission()
+    }
+
+    private fun updateListWithCurrentLocation() {
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            5000,
+            0F,
+            object : LocationListener {
+                override fun onLocationChanged(p0: Location) {
+                    viewModel.getNearVenues(p0.latitude, p0.longitude)
+                }
+
+                override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+
+                }
+
+                override fun onProviderEnabled(p0: String?) {
+                }
+
+                override fun onProviderDisabled(p0: String?) {
+                }
+
+            })
+
+        val localGpsLocation =
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        if (localGpsLocation != null)
+            viewModel.getNearVenues(localGpsLocation.latitude, localGpsLocation.longitude)
     }
 
     private fun getLocationPermission() {
@@ -52,9 +100,7 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
         )
     }
 
-    private fun updateVenueList() {
-        viewModel.getNearVenues(35.7730901, 51.3866738)
-
+    private fun subscribeToVenueFlow() {
         lifecycleScope.launchWhenStarted {
             viewModel.venusFlow.collect { event ->
                 Timber.tag("loadData").d("updateVenueList ${event}")
@@ -84,14 +130,14 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        if(EasyPermissions.somePermissionPermanentlyDenied(this,perms))
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms))
             AppSettingsDialog.Builder(this).build().show()
         else
             getLocationPermission()
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        updateVenueList()
+        updateListWithCurrentLocation()
     }
 
     override fun onRequestPermissionsResult(
@@ -100,6 +146,6 @@ class MainActivity : AppCompatActivity() ,EasyPermissions.PermissionCallbacks {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,this)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 }

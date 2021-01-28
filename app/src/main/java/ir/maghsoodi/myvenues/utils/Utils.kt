@@ -25,15 +25,15 @@ object Utils {
     fun getImage(categoryName: String): Int {
         return when (categoryName) {
             "Bridge" -> R.drawable.bridge
-            "Asian Restaurant", "BBQ Joint", "Italian Restaurant", "Juice Bar", "Tabbakhi", "Persian Restaurant" -> R.drawable.restaurant
+            "Hookah Bar","Restaurant","Asian Restaurant", "BBQ Joint", "Italian Restaurant", "Juice Bar", "Tabbakhi", "Persian Restaurant" -> R.drawable.restaurant
             "Bank" -> R.drawable.bank
             "Bakery" -> R.drawable.bakery
-            "Bookstores" -> R.drawable.book_shop
+            "College Bookstore","Bookstore" -> R.drawable.book_shop
             "Airport" -> R.drawable.airport
             "Sandwich Place", "Fast Food Restaurant" -> R.drawable.pizza_shop
             "Voting Booth" -> R.drawable.church
             "Plaza" -> R.drawable.castle
-            "Café" -> R.drawable.coffee_shop
+            "Lounge","Café" -> R.drawable.coffee_shop
             "College Library" -> R.drawable.place_library
             "Auto Dealership", "Auto Garage", "Car Wash" -> R.drawable.parking
             "Gym / Fitness Center", "Gyms or Fitness Centers", "Gym", "College Gym" -> R.drawable.gym
@@ -47,6 +47,7 @@ object Utils {
             "Music School", "School", "Student Center" -> R.drawable.school
             "College Auditorium", "College Academic Building", "General College & University" -> R.drawable.university
             "Garden" -> R.drawable.zoo
+            "Soccer Field" -> R.drawable.stadium
             "Government Building", "Business Center", "Campaign Office", "Office" -> R.drawable.office
             "Military Base" -> R.drawable.police_station
             "Eye Doctor", "Dentist's Office" -> R.drawable.clinic
