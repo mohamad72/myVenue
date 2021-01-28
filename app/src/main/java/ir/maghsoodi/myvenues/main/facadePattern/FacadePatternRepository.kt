@@ -15,9 +15,9 @@ interface FacadePatternRepository {
 
     suspend fun hasNearestMetaInDB(lat: Double, lng: Double): Boolean
 
-    suspend fun getNearestMetaInDB(lat: Double, lng: Double): MetaEntity
+    suspend fun getNearestMetaInDB(lat: Double, lng: Double): List<MetaEntity>
 
-    suspend fun getVenueEntitiesOfMetaFromDB(metaEntity: MetaEntity): List<VenueEntity>
+    suspend fun getVenueEntitiesOfMetaFromDB(metaEntities: List<MetaEntity>): List<VenueEntity>
 
     suspend fun deleteOldMeta(expireUnixTime: Long)
 

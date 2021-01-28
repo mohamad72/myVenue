@@ -38,7 +38,7 @@ object Utils {
             "Auto Dealership", "Auto Garage", "Car Wash" -> R.drawable.parking
             "Gym / Fitness Center", "Gyms or Fitness Centers", "Gym", "College Gym" -> R.drawable.gym
             "Doctor's Office", "Medical Center", "Health & Beauty Service" -> R.drawable.hospital
-            "Hotel" -> R.drawable.hotel
+            "Wedding Hall","Hotel" -> R.drawable.hotel
             "Bus Line", "Bus Station" -> R.drawable.bus_station
             "Shopping Mall", "Smoke Shop", "Gym Pools", "Market", "Supermarket" -> R.drawable.supermarket
             "Drugstore" -> R.drawable.pharmacy

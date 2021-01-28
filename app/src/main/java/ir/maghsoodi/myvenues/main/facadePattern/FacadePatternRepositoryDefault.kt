@@ -29,12 +29,12 @@ class FacadePatternRepositoryDefault @Inject constructor(
         return dbController.hasNearestMeta(lat, lng)
     }
 
-    override suspend fun getNearestMetaInDB(lat: Double, lng: Double): MetaEntity {
+    override suspend fun getNearestMetaInDB(lat: Double, lng: Double): List<MetaEntity> {
         return dbController.getNearestMeta(lat, lng)
     }
 
-    override suspend fun getVenueEntitiesOfMetaFromDB(metaEntity: MetaEntity): List<VenueEntity> {
-        return dbController.getVenueEntitiesOfMeta(metaEntity)
+    override suspend fun getVenueEntitiesOfMetaFromDB(metaEntities: List<MetaEntity>): List<VenueEntity> {
+        return dbController.getVenueEntitiesOfMeta(metaEntities)
     }
 
 
