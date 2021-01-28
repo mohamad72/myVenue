@@ -81,6 +81,7 @@ class VenueListFragment : Fragment(R.layout.fragment_venue_list) {
         rv_venues.apply {
             adapter = venueAdapter
             layoutManager = LinearLayoutManager(requireActivity())
+            layoutDirection=View.LAYOUT_DIRECTION_LTR
             addOnScrollListener(this@VenueListFragment.scrollListener)
         }
     }

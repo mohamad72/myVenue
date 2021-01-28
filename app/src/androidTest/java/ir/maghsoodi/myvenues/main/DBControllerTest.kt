@@ -8,10 +8,7 @@ import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth
 import ir.maghsoodi.myvenues.data.db.MyVenuesDataBase
 import ir.maghsoodi.myvenues.data.db.VenueDao
-import ir.maghsoodi.myvenues.data.models.Contact
-import ir.maghsoodi.myvenues.data.models.Location
-import ir.maghsoodi.myvenues.data.models.MetaEntity
-import ir.maghsoodi.myvenues.data.models.VenueEntity
+import ir.maghsoodi.myvenues.data.models.*
 import ir.maghsoodi.myvenues.utils.Constants
 import ir.maghsoodi.myvenues.utils.TimeManagementFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,6 +33,8 @@ class DBControllerTest {
 
     private lateinit var DBController: DBController
 
+    private lateinit var categories: ArrayList<Category>
+
     @Before
     fun setUp() {
         database = Room.inMemoryDatabaseBuilder(
@@ -45,6 +44,9 @@ class DBControllerTest {
         dao = database.getVenueDao()
 
         DBController = DBController(dao, TimeManagementFake())
+
+        categories=ArrayList()
+        categories.add(Category(""))
     }
 
     @After
@@ -55,7 +57,7 @@ class DBControllerTest {
     @Test
     fun saveMetaEntityIntoDB() = runBlockingTest {
         val metadata = MetaEntity("something", 200, 98.765, 12.345, 0L, "")
-        DBController.saveMetaEntityIntoDB(metadata)
+        DBController.saveMetaEntityIntoDB(metadata,98.765, 12.345)
 
         val allMetaEntity = dao.getAllMetaCalls()
 
@@ -66,7 +68,7 @@ class DBControllerTest {
     @Test
     fun saveVenueEntityIntoDB() = runBlockingTest {
         val metadata = MetaEntity("so1", 200, 98.765, 12.345, 0L,"")
-        DBController.saveMetaEntityIntoDB(metadata)
+        DBController.saveMetaEntityIntoDB(metadata,98.765, 12.345)
 
 
         val entitiesList = ArrayList<VenueEntity>()
@@ -74,6 +76,7 @@ class DBControllerTest {
             VenueEntity(
                 "something1",
                 "",
+                categories,
                 Contact(),
                 Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
                 "خونه"
@@ -83,6 +86,7 @@ class DBControllerTest {
             VenueEntity(
                 "something2",
                 "",
+                categories,
                 Contact(),
                 Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
                 "خوdfvfdvdfنه"

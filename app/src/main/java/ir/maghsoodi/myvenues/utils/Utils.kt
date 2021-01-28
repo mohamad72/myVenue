@@ -33,7 +33,7 @@ object Utils {
             "Sandwich Place", "Fast Food Restaurant" -> R.drawable.pizza_shop
             "Voting Booth" -> R.drawable.church
             "Plaza" -> R.drawable.castle
-            "Lounge","Café" -> R.drawable.coffee_shop
+            "Tea Room","Lounge","Café" -> R.drawable.coffee_shop
             "College Library" -> R.drawable.place_library
             "Auto Dealership", "Auto Garage", "Car Wash" -> R.drawable.parking
             "Gym / Fitness Center", "Gyms or Fitness Centers", "Gym", "College Gym" -> R.drawable.gym
