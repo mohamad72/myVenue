@@ -4,6 +4,7 @@ import ir.maghsoodi.myvenues.data.models.MetaEntity
 import org.junit.Test
 
 import org.junit.Assert.*
+import kotlin.math.min
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -20,13 +21,8 @@ class ExampleUnitTest {
         val m5 = MetaEntity("something5", 200, 98.765, 12.345, System.currentTimeMillis(), "")
 
         var clike = emptyList<MetaEntity>()
-        val javalike = listOf(m1,m2)
-//        val jadvalike = listOf(m1,m5)
-//        clike = clike.minus(javalike)
-        clike = clike.plus(javalike)
-        clike = clike.minus(m1)
-//        clike = clike.minus(jadvalike)
-//        clike = clike.plus(jadvalike)
-        println(clike)
+        val javalike = listOf(m1,m2,m3,m4,m5)
+        clike = javalike.subList(0, min(6,javalike.size))
+        println(clike.size)
     }
 }

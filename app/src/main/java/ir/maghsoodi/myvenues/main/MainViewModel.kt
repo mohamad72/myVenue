@@ -6,13 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.maghsoodi.myvenues.main.repository.MainRepository
 import ir.maghsoodi.myvenues.utils.Constants.Companion.MAXIMUM_NEAR_DISTANCE
+import ir.maghsoodi.myvenues.utils.Constants.Companion.NUMBER_OF_ITEMS_IN_EACH_PAGE
 import ir.maghsoodi.myvenues.utils.DispatcherProvider
 import ir.maghsoodi.myvenues.utils.Resource
 import ir.maghsoodi.myvenues.utils.Utils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.math.min
 
 
 class MainViewModel @ViewModelInject constructor(
@@ -20,26 +23,56 @@ class MainViewModel @ViewModelInject constructor(
     private val dispatchers: DispatcherProvider
 ) : ViewModel() {
 
-    val venusFlow: StateFlow<MainRepository.SearchEvent> = repository.venuesFlow
+    //    val venusFlow: StateFlow<MainRepository.SearchEvent> = repository.venuesFlow
+    private val _venuesFlow =
+        MutableStateFlow<MainRepository.SearchEvent>(MainRepository.SearchEvent.Empty)
+    val venuesFlow: StateFlow<MainRepository.SearchEvent> = _venuesFlow
+
 
     var lastLat: Double = 0.0
     var lastLng: Double = 0.0
 
+    var pageNumberOfList = 1
 
-    fun getNearVenues(lat: Double, lng: Double) {
+    fun getNearVenues(lat: Double, lng: Double, isPagination: Boolean) {
         Timber.tag("location").d("location changed again $lat, $lng")
-        if (lastLat == 0.0 ||
-            lastLng == 0.0 ||
-            Utils.calculateDistance(lat, lng, lastLat, lastLng) > MAXIMUM_NEAR_DISTANCE
-        )
-        {
-            lastLat=lat
-            lastLng=lng
+        if (isLocationReallyChanged(lat, lng) || isPagination) {
+            if (isPagination)
+                pageNumberOfList++
+            else
+                pageNumberOfList = 1
+            lastLat = lat
+            lastLng = lng
+            viewModelScope.launch(dispatchers.main) {
+                repository.venuesFlow.collect { event ->
+                    Timber.tag("observer_viewe").d(event.toString())
+                    when (event) {
+                        is MainRepository.SearchEvent.Success -> {
+                            _venuesFlow.value =
+                                MainRepository.SearchEvent.Success(
+                                    event.venueEntities.subList(
+                                        0,
+                                        min(
+                                            NUMBER_OF_ITEMS_IN_EACH_PAGE * pageNumberOfList,
+                                            event.venueEntities.size
+                                        )
+                                    )
+                                )
+                            Timber.tag("loadData").e("failed updateVenueList ")
+                        }
+                        else -> _venuesFlow.value = event
+                    }
+                }
+            }
             viewModelScope.launch(dispatchers.io) {
                 repository.getNearVenues(lat, lng)
             }
         }
     }
+
+    fun isLocationReallyChanged(lat: Double, lng: Double): Boolean = (lastLat == 0.0 ||
+            lastLng == 0.0 ||
+            Utils.calculateDistance(lat, lng, lastLat, lastLng) > MAXIMUM_NEAR_DISTANCE)
 
 
 }

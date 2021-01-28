@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             0F,
             object : LocationListener {
                 override fun onLocationChanged(p0: Location) {
-                    viewModel.getNearVenues(p0.latitude, p0.longitude)
+                    viewModel.getNearVenues(p0.latitude, p0.longitude,false)
                 }
 
                 override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         val localGpsLocation =
             locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         if (localGpsLocation != null)
-            viewModel.getNearVenues(localGpsLocation.latitude, localGpsLocation.longitude)
+            viewModel.getNearVenues(localGpsLocation.latitude, localGpsLocation.longitude,false)
     }
 
     private fun getLocationPermission() {
@@ -105,14 +105,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun subscribeToVenueFlow() {
         lifecycleScope.launchWhenStarted {
-            viewModel.venusFlow.collect { event ->
-                Timber.tag("loadData").d("updateVenueList ${event}")
+            viewModel.venuesFlow.collect { event ->
+                Timber.tag("observer_activity").d("updateVenueList ${event}")
                 when (event) {
                     is MainRepository.SearchEvent.Success -> {
                         venueListFragment.updateList(event.venueEntities)
                     }
                     is MainRepository.SearchEvent.Failure -> {
-                        Timber.tag("loadData").e("failed updateVenueList ${event.errorText}")
+                        Toast.makeText(this@MainActivity,event.errorText,Toast.LENGTH_LONG).show()
                     }
                     is MainRepository.SearchEvent.Loading -> {
                         venueListFragment.showProgressBar()
