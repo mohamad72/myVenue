@@ -13,6 +13,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.experimental.categories.Categories
 import org.junit.runner.RunWith
 
 
@@ -27,6 +28,8 @@ class TestVenueDao {
     private lateinit var database: MyVenuesDataBase
     private lateinit var dao: VenueDao
 
+    private lateinit var categories: ArrayList<Category>
+
     @Before
     fun setup() {
         database = Room.inMemoryDatabaseBuilder(
@@ -34,6 +37,9 @@ class TestVenueDao {
             MyVenuesDataBase::class.java
         ).allowMainThreadQueries().build()
         dao = database.getVenueDao()
+
+        categories=ArrayList()
+        categories.add(Category(""))
     }
 
     @After
@@ -80,7 +86,7 @@ class TestVenueDao {
         val venueEntity1 = VenueEntity(
             "something1",
             "so1",
-            ,
+            categories,
             Contact(),
             Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
             "خونه"
@@ -88,6 +94,7 @@ class TestVenueDao {
         val venueEntity2 = VenueEntity(
             "something2",
             "so2",
+            categories,
             Contact(),
             Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
             "خونه"
@@ -95,6 +102,7 @@ class TestVenueDao {
         val venueEntity3 = VenueEntity(
             "something1",
             "so2",
+            categories,
             Contact(),
             Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
             "خونه"
@@ -162,6 +170,7 @@ class TestVenueDao {
         val venueEntity1 = VenueEntity(
             "something1",
             "so1",
+            categories,
             Contact(),
             Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
             "خونه"
@@ -169,6 +178,7 @@ class TestVenueDao {
         val venueEntity2 = VenueEntity(
             "something2",
             "so2",
+            categories,
             Contact(),
             Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
             "خونه"
@@ -176,6 +186,7 @@ class TestVenueDao {
         val venueEntity3 = VenueEntity(
             "something3",
             "so1",
+            categories,
             Contact(),
             Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
             "خونه"
@@ -200,6 +211,7 @@ class TestVenueDao {
         val venueEntity1 = VenueEntity(
             "something1",
             "so1",
+            categories,
             Contact(),
             Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
             "خونه"

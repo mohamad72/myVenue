@@ -6,11 +6,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import ir.maghsoodi.myvenues.main.DBController
 import ir.maghsoodi.myvenues.data.db.MyVenuesDataBase
 import ir.maghsoodi.myvenues.data.db.VenueDao
 import ir.maghsoodi.myvenues.data.models.ApiFoursquare
-import ir.maghsoodi.myvenues.main.FacadePatternRepository
+import ir.maghsoodi.myvenues.main.DBController
+import ir.maghsoodi.myvenues.main.facadePattern.FacadePatternRepository
+import ir.maghsoodi.myvenues.main.facadePattern.FacadePatternRepositoryDefault
+import ir.maghsoodi.myvenues.main.RemoteController
 import ir.maghsoodi.myvenues.main.repository.MainRepository
 import ir.maghsoodi.myvenues.utils.Constants.Companion.BASE_URL
 import ir.maghsoodi.myvenues.utils.Constants.Companion.DATABASE_NAME
@@ -72,6 +74,19 @@ object AppModule {
         timeManagement: TimeManagement
     ):
             MainRepository = MainRepository(facadeRepository, timeManagement)
+
+
+    @Singleton
+    @Provides
+    fun provideFacadePatternRepository(
+        dbController: DBController,
+        remoteController: RemoteController
+    ):
+            FacadePatternRepository =
+        FacadePatternRepositoryDefault(
+            dbController,
+            remoteController
+        )
 
 
     @Singleton

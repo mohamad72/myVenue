@@ -2,7 +2,7 @@ package ir.maghsoodi.myvenues.main.repository
 
 import ir.maghsoodi.myvenues.data.models.SearchResponse
 import ir.maghsoodi.myvenues.data.models.VenueEntity
-import ir.maghsoodi.myvenues.main.FacadePatternRepository
+import ir.maghsoodi.myvenues.main.facadePattern.FacadePatternRepository
 import ir.maghsoodi.myvenues.utils.Constants.Companion.EXPIRE_TIME_RANGE
 import ir.maghsoodi.myvenues.utils.Resource
 import ir.maghsoodi.myvenues.utils.TimeManagement
