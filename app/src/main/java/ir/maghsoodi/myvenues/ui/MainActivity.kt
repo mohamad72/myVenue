@@ -41,7 +41,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         activateFragment(venueListFragment)
         subscribeToVenueFlow()
+    }
 
+    override fun onResume() {
+        super.onResume()
         if (Utils.hasLocationPermission(this))
             updateListWithCurrentLocation()
         else
