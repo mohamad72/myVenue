@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             0F,
             object : LocationListener {
                 override fun onLocationChanged(p0: Location) {
-                    viewModel.getNearVenues(p0.latitude, p0.longitude,false)
+                    viewModel.getNearVenues(p0.latitude, p0.longitude)
                 }
 
                 override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         val localGpsLocation =
             locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         if (localGpsLocation != null)
-            viewModel.getNearVenues(localGpsLocation.latitude, localGpsLocation.longitude,false)
+            viewModel.getNearVenues(localGpsLocation.latitude, localGpsLocation.longitude)
     }
 
     private fun getLocationPermission() {
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                         Toast.makeText(this@MainActivity,event.errorText,Toast.LENGTH_LONG).show()
                     }
                     is MainRepository.SearchEvent.Loading -> {
-                        venueListFragment.showProgressBar()
+                        venueListFragment.startLoading()
                     }
                     else -> Unit
                 }

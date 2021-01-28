@@ -54,7 +54,7 @@ class VenueAdapter(val activity: Activity) :
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val venueEntity = differ.currentList[position]
         holder.itemView.apply {
-            layoutDirection = View.LAYOUT_DIRECTION_RTL
+//            layoutDirection = View.LAYOUT_DIRECTION_RTL
 
             tv_title.text = if (venueEntity.name.split("|").size > 1)
                 venueEntity.name.split("|")[1]
