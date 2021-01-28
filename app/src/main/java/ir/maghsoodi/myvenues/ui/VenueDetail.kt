@@ -9,6 +9,7 @@ import ir.maghsoodi.myvenues.data.models.VenueEntity
 import ir.maghsoodi.myvenues.databinding.ActivityVenueDetailBinding
 import ir.maghsoodi.myvenues.main.VenueDetailModel
 import ir.maghsoodi.myvenues.utils.Utils
+import java.util.*
 
 class VenueDetail : AppCompatActivity() {
 
@@ -35,11 +36,9 @@ class VenueDetail : AppCompatActivity() {
 
     private fun setOnClickForMapButton() {
         binding.bMap.setOnClickListener {
-            val intent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("http://maps.google.com/maps?daddr=${venueEntity.location.lat},${venueEntity.location.lng}")
-            )
-            startActivity(intent)
+            val uri: String = java.lang.String.format(Locale.ENGLISH, "geo:%f,%f", venueEntity.location.lat, venueEntity.location.lng)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            startActivity(Intent.createChooser(intent, "Select your maps app"))
         }
     }
 
