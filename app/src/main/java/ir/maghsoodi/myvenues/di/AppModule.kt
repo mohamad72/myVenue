@@ -14,8 +14,11 @@ import ir.maghsoodi.myvenues.main.FacadePatternRepository
 import ir.maghsoodi.myvenues.main.repository.MainRepository
 import ir.maghsoodi.myvenues.utils.Constants.Companion.BASE_URL
 import ir.maghsoodi.myvenues.utils.Constants.Companion.DATABASE_NAME
+import ir.maghsoodi.myvenues.utils.DispatcherProvider
 import ir.maghsoodi.myvenues.utils.TimeManagement
 import ir.maghsoodi.myvenues.utils.TimeManagementDefault
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -69,4 +72,18 @@ object AppModule {
         timeManagement: TimeManagement
     ):
             MainRepository = MainRepository(facadeRepository, timeManagement)
+
+
+    @Singleton
+    @Provides
+    fun provideDispatchers(): DispatcherProvider = object : DispatcherProvider {
+        override val main: CoroutineDispatcher
+            get() = Dispatchers.Main
+        override val io: CoroutineDispatcher
+            get() = Dispatchers.IO
+        override val default: CoroutineDispatcher
+            get() = Dispatchers.Default
+        override val unconfined: CoroutineDispatcher
+            get() = Dispatchers.Unconfined
+    }
 }

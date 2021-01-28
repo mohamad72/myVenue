@@ -8,6 +8,7 @@ data class VenueEntity(
     @PrimaryKey(autoGenerate = false)
     val id: String,
     var requestId: String,
+    var categories: List<Category>,
     val contact: Contact,
     val location: Location,
     val name: String

@@ -6,10 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
-import ir.maghsoodi.myvenues.data.models.Contact
-import ir.maghsoodi.myvenues.data.models.Location
-import ir.maghsoodi.myvenues.data.models.MetaEntity
-import ir.maghsoodi.myvenues.data.models.VenueEntity
+import ir.maghsoodi.myvenues.data.models.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
@@ -83,6 +80,7 @@ class TestVenueDao {
         val venueEntity1 = VenueEntity(
             "something1",
             "so1",
+            ,
             Contact(),
             Location("tt", "tt", "tt", "tt", 500, 32.24, 54.23, "888"),
             "خونه"

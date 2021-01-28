@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+
+    <path
+        android:fillColor="#c2a186"
+        android:pathData="M24 120h464v368h-464z" />
+    <path
+        android:fillColor="#ad6643"
+        android:pathData="M360 120c0-53.019-46.562-96-104-96s-104 42.981-104 96h-128v32h128v272h208v-272h128v-32z" />
+    <path
+        android:fillColor="#962523"
+        android:pathData="M184 240h144v184h-144z" />
+    <path
+        android:fillColor="#dbb697"
+        android:pathData="M256 56c-39.764 0-72 28.654-72 64v120h144v-120c0-35.346-32.235-64-72-64z" />
+    <path
+        android:fillColor="#962523"
+        android:pathData="M 256 88 C 273.673111995 88 288 102.326888005 288 120 C 288 137.673111995 273.673111995 152 256 152 C 238.326888005 152 224 137.673111995 224 120 C 224 102.326888005 238.326888005 88 256 88 Z" />
+    <path
+        android:fillColor="#d4a811"
+        android:pathData="M184 432a8 8 0 0 1 -8-8v-56a8 8 0 0 1 16 0v56a8 8 0 0 1 -8 8z" />
+    <path
+        android:fillColor="#d4a811"
+        android:pathData="M 184 344 C 188.418277999 344 192 347.581722001 192 352 C 192 356.418277999 188.418277999 360 184 360 C 179.581722001 360 176 356.418277999 176 352 C 176 347.581722001 179.581722001 344 184 344 Z" />
+    <path
+        android:fillColor="#d4a811"
+        android:pathData="M328 432a8 8 0 0 1 -8-8v-56a8 8 0 0 1 16 0v56a8 8 0 0 1 -8 8z" />
+    <path
+        android:fillColor="#d4a811"
+        android:pathData="M 328 344 C 332.418277999 344 336 347.581722001 336 352 C 336 356.418277999 332.418277999 360 328 360 C 323.581722001 360 320 356.418277999 320 352 C 320 347.581722001 323.581722001 344 328 344 Z" />
+    <path
+        android:fillColor="#d4a811"
+        android:pathData="M256 432a8 8 0 0 1 -8-8v-56a8 8 0 0 1 16 0v56a8 8 0 0 1 -8 8z" />
+    <path
+        android:fillColor="#d4a811"
+        android:pathData="M 256 344 C 260.418277999 344 264 347.581722001 264 352 C 264 356.418277999 260.418277999 360 256 360 C 251.581722001 360 248 356.418277999 248 352 C 248 347.581722001 251.581722001 344 256 344 Z" />
+    <path
+        android:fillColor="#ad6643"
+        android:pathData="M64 184h32v208h-32z" />
+    <path
+        android:fillColor="#95573a"
+        android:pathData="M56 392h48v32h-48z" />
+    <path
+        android:fillColor="#95573a"
+        android:pathData="M56 152h48v32h-48z" />
+    <path
+        android:fillColor="#ad6643"
+        android:pathData="M416 184h32v208h-32z" />
+    <path
+        android:fillColor="#95573a"
+        android:pathData="M408 392h48v32h-48z" />
+    <path
+        android:fillColor="#95573a"
+        android:pathData="M408 152h48v32h-48z" />
+    <path
+        android:fillColor="#f7cc38"
+        android:pathData="M264 240h64a0 0 0 0 1 0 0v64a0 0 0 0 1 0 0 64 64 0 0 1 -64-64 0 0 0 0 1 0 0z" />
+    <path
+        android:fillColor="#f7cc38"
+        android:pathData="M248 240a0 0 0 0 1 0 0v64a0 0 0 0 1 0 0h-64a0 0 0 0 1 0 0 64 64 0 0 1 64-64z" />
+    <path
+        android:fillColor="#f7cc38"
+        android:pathData="M216 400c-22.056 0-40-14.355-40-32a8 8 0 0 1 16 0c0 8.673 10.991 16 24 16 15.45 0 32-9.391 32-16a8 8 0 0 1 16 0c0 9.167-6.207 17.675-17.477 23.958a65.616 65.616 0 0 1 -30.523 8.042z" />
+    <path
+        android:fillColor="#f7cc38"
+        android:pathData="M296 400a65.616 65.616 0 0 1 -30.523-8.042c-11.27-6.283-17.477-14.791-17.477-23.958a8 8 0 0 1 16 0c0 6.609 16.55 16 32 16 13.009 0 24-7.327 24-16a8 8 0 0 1 16 0c0 17.645-17.944 32-40 32z" />
+    <path
+        android:fillColor="#75452e"
+        android:pathData="M104 456h304v32h-304z" />
+    <path
+        android:fillColor="#95573a"
+        android:pathData="M104 424h304v32h-304z" />
+    <path
+        android:fillColor="#ad6643"
+        android:pathData="M408 424h80v64h-80z" />
+    <path
+        android:fillColor="#ad6643"
+        android:pathData="M24 424h80v64h-80z" />
+</vector>

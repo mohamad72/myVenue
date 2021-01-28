@@ -2,7 +2,7 @@ package ir.maghsoodi.myvenues.utils
 
 class Constants {
     companion object {
-        const val BASE_URL = "https://api.exchangeratesapi.io/"
+        const val BASE_URL = "https://api.foursquare.com/v2/venues/"
         const val LIMIT_FOR_EVERY_REQUEST = 50
         const val RADIUS_FOR_SEARCH = 200
         const val MAXIMUM_NEAR_DISTANCE = 100

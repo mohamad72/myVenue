@@ -11,7 +11,7 @@ import ir.maghsoodi.myvenues.data.models.VenueEntity
         VenueEntity::class,
         MetaEntity::class
     ],
-    version = 1
+    version = 3
 )
 @TypeConverters(TypeConverter::class)
 abstract class MyVenuesDataBase : RoomDatabase() {

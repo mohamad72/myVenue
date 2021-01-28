@@ -5,15 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:padding="10dp"
-    android:layout_height="match_parent">
+    android:layoutDirection="rtl"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_category"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:padding="5dp"
         android:src="@drawable/place_library"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/logo" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -21,10 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="2dp"
-        android:text="کتابخانه جندی شاپور"
         android:textStyle="bold"
         android:textColor="#444444"
-        android:textSize="13sp"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/iv_category"
         app:layout_constraintTop_toTopOf="@+id/iv_category" />
 
@@ -33,7 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="سه راهی شاپرک، نرسیده به خیابان تیموری"
         android:textColor="#666666"
         android:textSize="10sp"
         android:textStyle="normal"
@@ -44,24 +45,34 @@
         android:id="@+id/tv_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="883"
-        android:textColor="#444444"
-        android:textSize="13sp"
-        android:textStyle="bold"
         android:layout_marginEnd="3dp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_category"
+        android:textColor="@color/teal_700"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_address"
         app:layout_constraintEnd_toStartOf="@+id/tv_unit_distance"
-        app:layout_constraintTop_toTopOf="@+id/iv_category" />
+        app:layout_constraintTop_toTopOf="@+id/tv_title" />
+
     <TextView
         android:id="@+id/tv_unit_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="متر"
+        android:text="@string/meter"
         android:textColor="#444444"
         android:textSize="10sp"
-        android:layout_marginTop="2dp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_category"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_distance"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_category" />
+        app:layout_constraintTop_toTopOf="@+id/tv_distance" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:alpha="0.04"
+        android:background="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_category"
+        app:layout_constraintTop_toBottomOf="@+id/iv_category" />
 </androidx.constraintlayout.widget.ConstraintLayout>

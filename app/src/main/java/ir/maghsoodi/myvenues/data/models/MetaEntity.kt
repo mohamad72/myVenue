@@ -11,5 +11,5 @@ data class MetaEntity(
     var lat: Double,
     var lng: Double,
     var created_at: Long,
-    val errorDetail: String
+    var errorDetail: String=""
 )
