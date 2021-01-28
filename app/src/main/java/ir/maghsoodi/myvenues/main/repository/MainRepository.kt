@@ -8,6 +8,7 @@ import ir.maghsoodi.myvenues.utils.Resource
 import ir.maghsoodi.myvenues.utils.TimeManagement
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
@@ -25,11 +26,14 @@ class MainRepository @Inject constructor(
     private val _venuesFlow = MutableStateFlow<SearchEvent>(SearchEvent.Empty)
     val venuesFlow: StateFlow<SearchEvent> = _venuesFlow
 
+    var isSuccessYet = false
+
     suspend fun getNearVenues(lat: Double, lng: Double) {
+        Timber.tag("loadData repository")
+            .d("updateVenueList ${facadeRepository.hasNearestMetaInDB(lat, lng)}")
         _venuesFlow.value = SearchEvent.Loading
         getDataFromDb(lat, lng)
         getDataFromNet(lat, lng)
-
     }
 
     private suspend fun getDataFromDb(lat: Double, lng: Double) {
@@ -38,27 +42,31 @@ class MainRepository @Inject constructor(
             val metaEntity = facadeRepository.getNearestMetaInDB(lat, lng)
             val venueEntities = facadeRepository.getVenueEntitiesOfMetaFromDB(metaEntity)
             _venuesFlow.value = SearchEvent.Success(venueEntities)
+            isSuccessYet = true
         }
     }
 
-    suspend fun getDataFromNet(lat: Double, lng: Double) {
+    private suspend fun getDataFromNet(lat: Double, lng: Double) {
         when (val searchResponse = facadeRepository.searchNearVenueFromRemote(lat, lng)) {
-            is Resource.Error -> _venuesFlow.value = SearchEvent.Failure(searchResponse.message!!)
+            is Resource.Error -> {
+                if (!isSuccessYet)
+                    _venuesFlow.value = SearchEvent.Failure(searchResponse.message!!)
+            }
             is Resource.Success -> {
                 _venuesFlow.value = SearchEvent.Success(
                     searchResponse.data!!.response!!.venues
                 )
-                saveToDB(searchResponse,lat,lng)
+                saveToDB(searchResponse, lat, lng)
             }
         }
     }
 
-    suspend fun saveToDB(ratesResponse: Resource<SearchResponse>,lat: Double, lng: Double) {
+    suspend fun saveToDB(serachResponse: Resource<SearchResponse>, lat: Double, lng: Double) {
         facadeRepository.run {
-            saveMetaEntityIntoDB(ratesResponse.data!!.meta,lat,lng)
+            saveMetaEntityIntoDB(serachResponse.data!!.meta, lat, lng)
             saveVenueEntityIntoDB(
-                ratesResponse.data.meta,
-                ratesResponse.data.response.venues
+                metaEntity = serachResponse.data.meta,
+                venueEntities = serachResponse.data.response.venues
             )
         }
     }
