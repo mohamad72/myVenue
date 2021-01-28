@@ -11,6 +11,8 @@ class Constants {
         const val MINIMUM_EXPIRE_TIME = 1511666165000
         const val EXPIRE_TIME_RANGE: Long = 48 * 24 * 60 * 60 * 1000L
 
+        const val REQUEST_CODE_LOCATION_PERMISSION = 1
+
         const val DATABASE_NAME = "venue_db"
     }
 }

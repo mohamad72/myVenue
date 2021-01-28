@@ -2,7 +2,6 @@ package ir.maghsoodi.myvenues.adapters
 
 import android.app.Activity
 import android.content.Intent
-import android.util.LayoutDirection
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import com.google.gson.Gson
 import ir.maghsoodi.myvenues.R
 import ir.maghsoodi.myvenues.data.models.VenueEntity
 import ir.maghsoodi.myvenues.ui.VenueDetail
-import ir.maghsoodi.myvenues.utils.Utils.Companion.getImage
+import ir.maghsoodi.myvenues.utils.Utils.getImage
 import kotlinx.android.synthetic.main.item_venue.view.*
 
 
@@ -70,7 +69,7 @@ class VenueAdapter(val activity: Activity) :
                 iv_category.setImageResource(getImage(venueEntity.categories[0].name))
 
             setOnClickListener {
-                var options: ActivityOptionsCompat? =
+                val options: ActivityOptionsCompat? =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         activity,
                         UtilPair.create(iv_category, iv_category.transitionName),

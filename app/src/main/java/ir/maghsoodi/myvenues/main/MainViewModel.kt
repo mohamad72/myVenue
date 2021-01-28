@@ -18,9 +18,9 @@ class MainViewModel @ViewModelInject constructor(
 
     val venusFlow: StateFlow<MainRepository.SearchEvent> = repository.venuesFlow
 
-    fun getNearVenues() {
+    fun getNearVenues(lat: Double, lng: Double) {
         viewModelScope.launch(dispatchers.io) {
-            repository.getNearVenues(35.7730901,51.3866738)
+            repository.getNearVenues(lat, lng)
         }
     }
 
