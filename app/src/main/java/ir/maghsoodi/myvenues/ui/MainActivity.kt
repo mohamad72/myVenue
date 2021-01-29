@@ -23,6 +23,8 @@ import ir.maghsoodi.myvenues.R
 import ir.maghsoodi.myvenues.databinding.ActivityMainBinding
 import ir.maghsoodi.myvenues.main.MainViewModel
 import ir.maghsoodi.myvenues.main.repository.MainRepository
+import ir.maghsoodi.myvenues.ui.fragments.NoGPSFragment
+import ir.maghsoodi.myvenues.ui.fragments.NoInternetFragment
 import ir.maghsoodi.myvenues.ui.fragments.VenueListFragment
 import ir.maghsoodi.myvenues.utils.Constants.Companion.INTERNET_IS_ONLINE_MESSAGE
 import ir.maghsoodi.myvenues.utils.Constants.Companion.LOCATION_LAT_CAFE_BAZAAR
@@ -49,8 +51,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        activateFragment(venueListFragment)
     }
 
 
@@ -83,30 +83,30 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun checkGPSIsOn() {
-        if(isGPSEnable(this))
+        if (isGPSEnable(this))
             startProcessAfterGrantLocation()
         else
-            Toast.makeText(applicationContext, "turn on gps", Toast.LENGTH_LONG)
-                .show()
+            activateFragment(noGPSFragment)
     }
 
     private fun startProcessAfterGrantLocation() {
-        Timber.tag("location changed").d("startProcessAfterGrantLocation")
+        Timber.tag("internet is back").e("skjjksnfkjshkf")
+        updateVenueWithLastLocation()
         subscribeToVenueFlow()
-        updateListWithCurrentLocation()
+        setListnerForLocationChanger()
         setupChannelForTurningInternetOn()
     }
 
     private fun subscribeToVenueFlow() {
         lifecycleScope.launchWhenStarted {
             viewModel.venuesFlow.collect { event ->
-                Timber.tag("observer_activity").d("updateVenueList ${event}")
+                Timber.tag("internet is back").d("updateVenueList ${event}")
                 when (event) {
                     is MainRepository.SearchEvent.Success -> {
                         venueListFragment.updateList(event.venueEntities)
                     }
                     is MainRepository.SearchEvent.Failure -> {
-                        Toast.makeText(this@MainActivity, event.errorText, Toast.LENGTH_LONG).show()
+                        activateFragment(noInternetFragment)
                     }
                     is MainRepository.SearchEvent.Loading -> {
                         venueListFragment.startLoading()
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    private fun updateListWithCurrentLocation() {
+    private fun setListnerForLocationChanger() {
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             0F,
             object : LocationListener {
                 override fun onLocationChanged(p0: Location) {
-                    locationChanged(p0.latitude, p0.longitude)
+                    updateVenueWithThisLocation(p0.latitude, p0.longitude)
                 }
 
                 override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
@@ -153,17 +153,21 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         val localGpsLocation =
             locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         if (localGpsLocation != null)
-            locationChanged(localGpsLocation.latitude, localGpsLocation.longitude)
+            updateVenueWithThisLocation(localGpsLocation.latitude, localGpsLocation.longitude, true)
         else {
             Toast.makeText(applicationContext, getString(R.string.gps_is_weak), Toast.LENGTH_LONG)
                 .show()
-            locationChanged(LOCATION_LAT_CAFE_BAZAAR,LOCATION_LNG_CAFE_BAZAAR)
+            updateVenueWithLastLocation()
         }
     }
 
-    private fun locationChanged(lat: Double, lng: Double) {
+    private fun updateVenueWithThisLocation(lat: Double, lng: Double, isForce: Boolean = false) {
         Timber.tag("location changed").d("new location :$lat, $lng")
         viewModel.getNearVenues(lat, lng)
+    }
+
+    private fun updateVenueWithLastLocation() {
+        viewModel.getNearVenues(true)
     }
 
     private fun setupChannelForTurningInternetOn() {
@@ -224,6 +228,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun turnInternetOnline() {
+        Timber.tag("internet").d("internet is back")
+        activateFragment(venueListFragment)
         viewModel.getNearVenues(true)
     }
 

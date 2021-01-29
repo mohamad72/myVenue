@@ -61,7 +61,7 @@ class VenueAdapter(val activity: Activity) :
             else
                 venueEntity.name.split("|")[0]
 
-            tv_address.text = venueEntity.location.getShortAddress()
+            tv_description.text = venueEntity.location.getShortAddress()
 
             tv_distance.text = venueEntity.location.distance.toString()
 
@@ -73,7 +73,7 @@ class VenueAdapter(val activity: Activity) :
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         activity,
                         UtilPair.create(iv_category, iv_category.transitionName),
-                        UtilPair.create(tv_address, tv_address.transitionName),
+                        UtilPair.create(tv_description, tv_description.transitionName),
                         UtilPair.create(tv_title, tv_title.transitionName)
                     )
                 val intent = Intent(activity, VenueDetail::class.java)
