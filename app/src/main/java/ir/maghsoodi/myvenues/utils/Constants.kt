@@ -7,6 +7,7 @@ class Constants {
         const val RADIUS_FOR_SEARCH = 200
         const val MAXIMUM_NEAR_DISTANCE = 100
         const val NUMBER_OF_ITEMS_IN_EACH_PAGE = 15
+        const val INTERNET_IS_ONLINE_MESSAGE = "INTERNET_IS_ONLINE_MESSAGE"
         const val VERSION_API = 20120609
         const val FAKE_CURRENT_TIME = 1611666165000
         const val MINIMUM_EXPIRE_TIME = 1511666165000

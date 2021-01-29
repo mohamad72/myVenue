@@ -1,7 +1,10 @@
 package ir.maghsoodi.myvenues.ui
 
 import android.Manifest
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -13,11 +16,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.work.*
 import dagger.hilt.android.AndroidEntryPoint
 import ir.maghsoodi.myvenues.databinding.ActivityMainBinding
 import ir.maghsoodi.myvenues.main.MainViewModel
 import ir.maghsoodi.myvenues.main.repository.MainRepository
 import ir.maghsoodi.myvenues.ui.fragments.VenueListFragment
+import ir.maghsoodi.myvenues.utils.Constants.Companion.INTERNET_IS_ONLINE_MESSAGE
 import ir.maghsoodi.myvenues.utils.Constants.Companion.REQUEST_CODE_LOCATION_PERMISSION
 import ir.maghsoodi.myvenues.utils.Utils
 import kotlinx.coroutines.flow.collect
@@ -33,6 +39,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     val viewModel: MainViewModel by viewModels()
 
+    private val venueListFragment: VenueListFragment = VenueListFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,15 +47,60 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         setContentView(binding.root)
 
         activateFragment(venueListFragment)
-        subscribeToVenueFlow()
+    }
+
+
+    private fun activateFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(binding.flFragments.id, fragment)
+            commit()
+        }
+    }
+
+    lateinit var request: WorkRequest
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(applicationContext)
+            .registerReceiver(
+                DeviceIsOnline, IntentFilter(
+                    INTERNET_IS_ONLINE_MESSAGE
+                )
+            )
     }
 
     override fun onResume() {
         super.onResume()
         if (Utils.hasLocationPermission(this))
-            updateListWithCurrentLocation()
+            startProcessAfterGrantLocation()
         else
             getLocationPermission()
+    }
+
+    private fun startProcessAfterGrantLocation(){
+        subscribeToVenueFlow()
+        updateListWithCurrentLocation()
+        setupChannelForTurningInternetOn()
+    }
+
+    private fun subscribeToVenueFlow() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.venuesFlow.collect { event ->
+                Timber.tag("observer_activity").d("updateVenueList ${event}")
+                when (event) {
+                    is MainRepository.SearchEvent.Success -> {
+                        venueListFragment.updateList(event.venueEntities)
+                    }
+                    is MainRepository.SearchEvent.Failure -> {
+                        Toast.makeText(this@MainActivity, event.errorText, Toast.LENGTH_LONG).show()
+                    }
+                    is MainRepository.SearchEvent.Loading -> {
+                        venueListFragment.startLoading()
+                    }
+                    else -> Unit
+                }
+            }
+        }
     }
 
     private fun updateListWithCurrentLocation() {
@@ -86,8 +138,28 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         val localGpsLocation =
             locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        if (localGpsLocation != null)
+        if (localGpsLocation != null) {
             viewModel.getNearVenues(localGpsLocation.latitude, localGpsLocation.longitude)
+            setupChannelForTurningInternetOn()
+        }
+    }
+
+    private fun setupChannelForTurningInternetOn() {
+        if (Utils.hasInternetConnection(this))
+            return
+        if (!Utils.hasLocationPermission(this))
+            return
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        request =
+            OneTimeWorkRequest.Builder(MyWork::class.java)
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance(this).enqueue(request)
     }
 
     private fun getLocationPermission() {
@@ -98,40 +170,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             this,
             "لطفا برای ادامه کار اجازه دسترسی به لوکیشن بدهید",
             REQUEST_CODE_LOCATION_PERMISSION,
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
     }
-
-    private fun subscribeToVenueFlow() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.venuesFlow.collect { event ->
-                Timber.tag("observer_activity").d("updateVenueList ${event}")
-                when (event) {
-                    is MainRepository.SearchEvent.Success -> {
-                        venueListFragment.updateList(event.venueEntities)
-                    }
-                    is MainRepository.SearchEvent.Failure -> {
-                        Toast.makeText(this@MainActivity,event.errorText,Toast.LENGTH_LONG).show()
-                    }
-                    is MainRepository.SearchEvent.Loading -> {
-                        venueListFragment.startLoading()
-                    }
-                    else -> Unit
-                }
-            }
-        }
-    }
-
-    private val venueListFragment: VenueListFragment = VenueListFragment()
-
-    private fun activateFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().apply {
-            replace(binding.flFragments.id, fragment)
-            commit()
-        }
-    }
-
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms))
             AppSettingsDialog.Builder(this).build().show()
@@ -140,7 +182,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        updateListWithCurrentLocation()
+        startProcessAfterGrantLocation()
     }
 
     override fun onRequestPermissionsResult(
@@ -150,5 +192,31 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    var DeviceIsOnline: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            turnInternetOnline()
+        }
+    }
+
+    private fun turnInternetOnline() {
+        viewModel.getNearVenues()
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        try {
+            WorkManager.getInstance().cancelWorkById(request.id)
+        } catch (e: Exception) {
+        }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        LocalBroadcastManager.getInstance(applicationContext)
+            .unregisterReceiver(DeviceIsOnline);
     }
 }

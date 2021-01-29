@@ -57,12 +57,14 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
+    fun getNearVenues() = getNearVenues(lastLat, lastLng)
+
     fun getNearVenues(lat: Double, lng: Double) {
         Timber.tag("location").d("location changed again $lat, $lng")
-        if (isLocationReallyChanged(lat, lng)) {
-            pageNumberOfList = 1
+        if (isLocationReallyChanged(lat, lng) || isLastTryAreFailed()) {
             lastLat = lat
             lastLng = lng
+            pageNumberOfList = 1
             viewModelScope.launch(dispatchers.main) {
                 repository.venuesFlow.collect { event ->
                     Timber.tag("observer_viewe").d(event.toString())
@@ -95,5 +97,5 @@ class MainViewModel @ViewModelInject constructor(
             lastLng == 0.0 ||
             Utils.calculateDistance(lat, lng, lastLat, lastLng) > MAXIMUM_NEAR_DISTANCE)
 
-
+    private fun isLastTryAreFailed(): Boolean = venueEntities.size < 10
 }

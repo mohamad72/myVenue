@@ -49,10 +49,12 @@ class MainRepository @Inject constructor(
     private suspend fun getDataFromNet(lat: Double, lng: Double) {
         when (val searchResponse = facadeRepository.searchNearVenueFromRemote(lat, lng)) {
             is Resource.Error -> {
+                Timber.tag("dddddddddddd").d("hellgggggggg")
                 if (!isSuccessYet)
                     _venuesFlow.value = SearchEvent.Failure(searchResponse.message!!)
             }
             is Resource.Success -> {
+                Timber.tag("dddddddddddd").d("hellllppppppp")
                 _venuesFlow.value = SearchEvent.Success(
                     searchResponse.data!!.response!!.venues
                 )
