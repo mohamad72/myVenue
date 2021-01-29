@@ -1,6 +1,9 @@
 package ir.maghsoodi.myvenues.di
 
 import android.app.Application
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.createDataStore
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
@@ -29,6 +32,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 object AppModule {
+
+    @Provides
+    fun provideDataStore(app: Application): DataStore<Preferences> = app.createDataStore(name = "settings")
 
     @Singleton
     @Provides

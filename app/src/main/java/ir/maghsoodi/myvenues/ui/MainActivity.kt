@@ -46,6 +46,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     val viewModel: MainViewModel by viewModels()
 
     private val venueListFragment: VenueListFragment = VenueListFragment()
+    private val noInternetFragment: NoInternetFragment = NoInternetFragment()
+    private val noGPSFragment: NoGPSFragment = NoGPSFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +77,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onResume() {
         super.onResume()
+        activateFragment(venueListFragment)
         Timber.tag("location changed").d("onResume ${Utils.hasLocationPermission(this)}")
         if (Utils.hasLocationPermission(this))
             checkGPSIsOn()
@@ -103,12 +106,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Timber.tag("internet is back").d("updateVenueList ${event}")
                 when (event) {
                     is MainRepository.SearchEvent.Success -> {
+                        activateFragment(venueListFragment)
                         venueListFragment.updateList(event.venueEntities)
                     }
                     is MainRepository.SearchEvent.Failure -> {
                         activateFragment(noInternetFragment)
                     }
                     is MainRepository.SearchEvent.Loading -> {
+                        activateFragment(venueListFragment)
                         venueListFragment.startLoading()
                     }
                     else -> Unit
@@ -163,7 +168,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun updateVenueWithThisLocation(lat: Double, lng: Double, isForce: Boolean = false) {
         Timber.tag("location changed").d("new location :$lat, $lng")
-        viewModel.getNearVenues(lat, lng)
+        viewModel.getNearVenues(lat, lng, isForce)
     }
 
     private fun updateVenueWithLastLocation() {
