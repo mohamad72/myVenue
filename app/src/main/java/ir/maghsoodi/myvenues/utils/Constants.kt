@@ -12,6 +12,8 @@ class Constants {
         const val FAKE_CURRENT_TIME = 1611666165000
         const val MINIMUM_EXPIRE_TIME = 1511666165000
         const val EXPIRE_TIME_RANGE: Long = 48 * 24 * 60 * 60 * 1000L
+        const val LOCATION_LAT_CAFE_BAZAAR = 35.7833979
+        const val LOCATION_LNG_CAFE_BAZAAR = 51.3809216
 
         const val REQUEST_CODE_LOCATION_PERMISSION = 1
 

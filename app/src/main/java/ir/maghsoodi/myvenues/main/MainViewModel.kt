@@ -57,11 +57,11 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    fun getNearVenues() = getNearVenues(lastLat, lastLng)
+    fun getNearVenues(isInternetTurnedOnlineNow: Boolean) = getNearVenues(lastLat, lastLng,isInternetTurnedOnlineNow)
 
-    fun getNearVenues(lat: Double, lng: Double) {
+    fun getNearVenues(lat: Double, lng: Double, isInternetTurnedOnlineNow: Boolean = false) {
         Timber.tag("location").d("location changed again $lat, $lng")
-        if (isLocationReallyChanged(lat, lng) || isLastTryAreFailed()) {
+        if (isLocationReallyChanged(lat, lng) || isInternetTurnedOnlineNow) {
             lastLat = lat
             lastLng = lng
             pageNumberOfList = 1
@@ -96,6 +96,4 @@ class MainViewModel @ViewModelInject constructor(
     fun isLocationReallyChanged(lat: Double, lng: Double): Boolean = (lastLat == 0.0 ||
             lastLng == 0.0 ||
             Utils.calculateDistance(lat, lng, lastLat, lastLng) > MAXIMUM_NEAR_DISTANCE)
-
-    private fun isLastTryAreFailed(): Boolean = venueEntities.size < 10
 }

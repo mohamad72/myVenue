@@ -19,13 +19,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.*
 import dagger.hilt.android.AndroidEntryPoint
+import ir.maghsoodi.myvenues.R
 import ir.maghsoodi.myvenues.databinding.ActivityMainBinding
 import ir.maghsoodi.myvenues.main.MainViewModel
 import ir.maghsoodi.myvenues.main.repository.MainRepository
 import ir.maghsoodi.myvenues.ui.fragments.VenueListFragment
 import ir.maghsoodi.myvenues.utils.Constants.Companion.INTERNET_IS_ONLINE_MESSAGE
+import ir.maghsoodi.myvenues.utils.Constants.Companion.LOCATION_LAT_CAFE_BAZAAR
+import ir.maghsoodi.myvenues.utils.Constants.Companion.LOCATION_LNG_CAFE_BAZAAR
 import ir.maghsoodi.myvenues.utils.Constants.Companion.REQUEST_CODE_LOCATION_PERMISSION
 import ir.maghsoodi.myvenues.utils.Utils
+import ir.maghsoodi.myvenues.utils.Utils.isGPSEnable
 import kotlinx.coroutines.flow.collect
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -71,13 +75,23 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onResume() {
         super.onResume()
+        Timber.tag("location changed").d("onResume ${Utils.hasLocationPermission(this)}")
         if (Utils.hasLocationPermission(this))
-            startProcessAfterGrantLocation()
+            checkGPSIsOn()
         else
             getLocationPermission()
     }
 
-    private fun startProcessAfterGrantLocation(){
+    private fun checkGPSIsOn() {
+        if(isGPSEnable(this))
+            startProcessAfterGrantLocation()
+        else
+            Toast.makeText(applicationContext, "turn on gps", Toast.LENGTH_LONG)
+                .show()
+    }
+
+    private fun startProcessAfterGrantLocation() {
+        Timber.tag("location changed").d("startProcessAfterGrantLocation")
         subscribeToVenueFlow()
         updateListWithCurrentLocation()
         setupChannelForTurningInternetOn()
@@ -121,7 +135,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             0F,
             object : LocationListener {
                 override fun onLocationChanged(p0: Location) {
-                    viewModel.getNearVenues(p0.latitude, p0.longitude)
+                    locationChanged(p0.latitude, p0.longitude)
                 }
 
                 override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
@@ -138,10 +152,18 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         val localGpsLocation =
             locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        if (localGpsLocation != null) {
-            viewModel.getNearVenues(localGpsLocation.latitude, localGpsLocation.longitude)
-            setupChannelForTurningInternetOn()
+        if (localGpsLocation != null)
+            locationChanged(localGpsLocation.latitude, localGpsLocation.longitude)
+        else {
+            Toast.makeText(applicationContext, getString(R.string.gps_is_weak), Toast.LENGTH_LONG)
+                .show()
+            locationChanged(LOCATION_LAT_CAFE_BAZAAR,LOCATION_LNG_CAFE_BAZAAR)
         }
+    }
+
+    private fun locationChanged(lat: Double, lng: Double) {
+        Timber.tag("location changed").d("new location :$lat, $lng")
+        viewModel.getNearVenues(lat, lng)
     }
 
     private fun setupChannelForTurningInternetOn() {
@@ -174,6 +196,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
     }
+
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms))
             AppSettingsDialog.Builder(this).build().show()
@@ -182,7 +205,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        startProcessAfterGrantLocation()
+        checkGPSIsOn()
     }
 
     override fun onRequestPermissionsResult(
@@ -201,7 +224,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun turnInternetOnline() {
-        viewModel.getNearVenues()
+        viewModel.getNearVenues(true)
     }
 
 
